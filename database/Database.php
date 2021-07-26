@@ -52,12 +52,17 @@ if(class_exists("Connection")==false)
 class Database extends Connection
 {
 
-
+    var $database_sel="";
     function __construct()
     {
 
         parent::__construct();
 
+    }
+
+    function setDatabase($database)
+    {
+        $this->database_sel=$database;
     }
 
     function runQuery($database,$query)
@@ -85,6 +90,12 @@ class Database extends Connection
 
     }
 
+    function runQueryi($query)
+    {
+        $res=$this->runQuery($this->database_sel,$query);
+        return
+    }
+
     function getNumOfRows($database,$query)
     {
 
@@ -98,6 +109,13 @@ class Database extends Connection
             array_push($this->log,"query '".$query."' does not return a result set");
             return 0;
         }
+
+    }
+
+    function getNumOfRowsi($query)
+    {
+
+        return $this->getNumOfRows($this->database_sel,$query);
 
     }
 
@@ -129,9 +147,21 @@ class Database extends Connection
 
     }   
 
+    function getNumOfRowsFromQueryi($query,$countchar)
+    {
+
+        return $this->getNumOfRowsFromQuery($this->database_sel,$query,$countchar);
+
+    }
+
     function rowExists($database,$query)
     {
         return $this->getNumOfRows($database,$query)>0;
+    }
+
+    function rowExistsi($query)
+    {
+        return $this->rowExists($this->database_sel,$query)>0;
     }
 
     function runQueryLoop($database,$query,$loopfunc,$failedloop)
@@ -164,6 +194,15 @@ class Database extends Connection
         }
 
     }
+
+    function runQueryLoopi($query,$loopfunc,$failedloop)
+    {
+
+        $this->runQueryLoop($this->database_sel,$query,$loopfunc,$failedloop);
+
+
+    }
+
 
     
 
