@@ -2,44 +2,44 @@
 
 if(class_exists("Connection")==false)
 {
-    if(file_exists("database/Connection.php"))
+    if(file_exists("database/Connection.php")&class_exists("Connection")==false)
     {
         include("database/Connection.php");
     }
-    if(file_exists("../Connection/Connection.php"))
+    if(file_exists("../Connection/Connection.php")&class_exists("Connection")==false)
     {
         include("../Connection/Connection.php");
     }
-    if(file_exists("../../Connection/Connection.php"))
+    if(file_exists("../../Connection/Connection.php")&class_exists("Connection")==false)
     {
         include("../../Connection/Connection.php");
     }
-    if(file_exists("../../../Connection/Connection.php"))
+    if(file_exists("../../../Connection/Connection.php")&class_exists("Connection")==false)
     {
         include("../../../Connection/Connection.php");
     }
-    if(file_exists("../../../../Connection/Connection.php"))
+    if(file_exists("../../../../Connection/Connection.php")&class_exists("Connection")==false)
     {
         include("../../../../Connection/Connection.php");
     }
 
-    if(file_exists("Connection.php"))
+    if(file_exists("Connection.php")&class_exists("Connection")==false)
     {
         include("Connection.php");
     }
-    if(file_exists("../Connection.php"))
+    if(file_exists("../Connection.php")&class_exists("Connection")==false)
     {
         include("../Connection.php");
     }
-    if(file_exists("../../Connection.php"))
+    if(file_exists("../../Connection.php")&class_exists("Connection")==false)
     {
         include("../../Connection.php");
     }
-    if(file_exists("../../../Connection.php"))
+    if(file_exists("../../../Connection.php")&class_exists("Connection")==false)
     {
         include("../../../Connection.php");
     }
-    if(file_exists("../../../../Connection.php"))
+    if(file_exists("../../../../Connection.php")&class_exists("Connection")==false)
     {
         include("../../../../Connection.php");
     }
@@ -47,6 +47,7 @@ if(class_exists("Connection")==false)
 
 
 }
+
 
 
 class Database extends Connection
@@ -93,7 +94,7 @@ class Database extends Connection
     function runQueryi($query)
     {
         $res=$this->runQuery($this->database_sel,$query);
-        return
+        return $res;
     }
 
     function getNumOfRows($database,$query)
@@ -209,7 +210,53 @@ class Database extends Connection
 
 }
 
+if(class_exists("Paginate")==false)
+{
+    if(file_exists("database/Paginate.php")&class_exists("Paginate")==false)
+    {
+        include("database/Paginate.php");
+    }
+    if(file_exists("../database/Paginate.php")&class_exists("Paginate")==false)
+    {
+        include("../database/Paginate.php");
+    }
+    if(file_exists("../../database/Paginate.php")&class_exists("Paginate")==false)
+    {
+        include("../../database/Paginate.php");
+    }
+    if(file_exists("../../../database/Paginate.php")&class_exists("Paginate")==false)
+    {
+        include("../../../database/Paginate.php");
+    }
+    if(file_exists("../../../../database/Paginate.php")&class_exists("Paginate")==false)
+    {
+        include("../../../../database/Paginate.php");
+    }
 
+    if(file_exists("Paginate.php")&class_exists("Paginate")==false)
+    {
+        include("Paginate.php");
+    }
+    if(file_exists("../Paginate.php")&class_exists("Paginate")==false)
+    {
+        include("../Paginate.php");
+    }
+    if(file_exists("../../Paginate.php")&class_exists("Paginate")==false)
+    {
+        include("../../Paginate.php");
+    }
+    if(file_exists("../../../Paginate.php")&class_exists("Paginate")==false)
+    {
+        include("../../../Paginate.php");
+    }
+    if(file_exists("../../../../Paginate.php")&class_exists("Paginate")==false)
+    {
+        include("../../../../Paginate.php");
+    }
+
+
+
+}
 
 
 ?>
