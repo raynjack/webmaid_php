@@ -60,6 +60,8 @@ class Paginate extends Database
     var $num_results_perpage=10;
     var $num_pages_perview=5;
 
+    var $write_logs=true;
+
     function __construct($query)
     {
         $this->query = $query;
@@ -119,6 +121,10 @@ class Paginate extends Database
         if($r>-1)
         {
 
+            if($this->write_logs)
+            {
+                
+            }
             $e=$r+strlen(" from ");
             $p=stripos($this->query," limit ");
 
@@ -186,18 +192,22 @@ class Paginate extends Database
     function getNumOfPages()
     {
 
-        $n=$this->getNumOfPages();
-        $pages=$n/$this->num_results_perpage;
+        $n=$this->getNumRows();
+        $pages=(int)($n/$this->num_results_perpage);
         $rem=$n % $this->num_results_perpage;
         if($rem>0)
         {
             $pages++;
         }
+        if($this->write_logs)
+        {
+            $this->writeLog("ran query ".$this->query." returned ".$pages." pages ".$n." rows ".$rem);
+        }
         return $pages;
 
     }
 
-    function pageinate()
+    function paginate()
     {
 
         $pages=$this->getNumOfPages();
@@ -210,9 +220,10 @@ class Paginate extends Database
             
         }
 
+        //index of the nail in the number of pages allowed to be view per set
         $r=($start+($this->num_pages_perview*$this->num_results_perpage));
 
-        if(($start-$this->num_results_perpage)>0)
+        if(($start-$this->num_results_perpage)>=0)
         {
             $onPrev=$this->onPrevFunction;
             $prev=$start-$this->num_results_perpage;
@@ -233,6 +244,14 @@ class Paginate extends Database
             
             $onNext=$this->onNextFunction;
             $next=$r+$this->num_results_perpage;
+            $onNext($next);
+
+        }
+        else if(($start+$this->num_results_perpage)<$num_rows)
+        {
+            
+            $onNext=$this->onNextFunction;
+            $next=$start+$this->num_results_perpage;
             $onNext($next);
 
         }

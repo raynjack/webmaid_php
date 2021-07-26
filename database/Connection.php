@@ -26,12 +26,12 @@
 
            if($connection)
            {
-               array_push($this->log,"connected successfully to server '".$this->server."' database='".$this->database."'");
+               $this->writeLog("connected successfully to server '".$this->server."' database='".$this->database."'");
                return $connection;
            }
            else{
 
-               array_push($this->log,$h);
+            $this->writeLog($this->log,$h);
                return false;
 
            }
@@ -43,9 +43,22 @@
 
            if($con instanceof mysqli)
            {
+
+            $this->writeLog("closed mysqli connection to ".$this->server." user=".$this->username);
                mysqli_close($con);
            }
+           else
+           {
+               $this->writeLog("closing mysqli connection to ".$this->server." user=".$this->username+" failed disconnect(con) is con is not of type mysqli");
+           }
 
+       }
+
+       function writeLog($log)
+       {
+   
+           array_push($this->log,$log);
+   
        }
 
 

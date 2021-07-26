@@ -27,6 +27,7 @@ pre code {
 
 <h4>Running a query and retrieving a result</h4>
 <br>
+<a href="pag_doc.php">Next Paginate.php</a>
 
 <pre>
 
@@ -217,3 +218,4 @@ echo "<br>";
 
 </pre>
 
+<a href="pag_doc.php">Next Paginate.php</a>

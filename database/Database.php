@@ -74,17 +74,29 @@ class Database extends Connection
 
         if($res instanceof mysqli_result)
         {
-            array_push($this->log,"executed query '".$query."' and return results with ".mysqli_num_rows($res)." rows");
+            $this->writeLog("executed query '".$query."' and return results with ".mysqli_num_rows($res)." rows");
+            if($connection)
+            {
+                mysqli_close($connection);
+            }
             return $res;
         }
         else if($res)
         {
-            array_push($this->log,"executed query '".$query."' successfully with ".mysqli_affected_rows($connection)." affected rows");
+            $this->writeLog("executed query '".$query."' successfully with ".mysqli_affected_rows($connection)." affected rows");
+            if($connection)
+            {
+                mysqli_close($connection);
+            }
             return mysqli_affected_rows($connection);
         }
         else{
 
-            array_push($this->log,"query '".$query."' failed with this error ".mysqli_error($connection));
+            $this->writeLog("query '".$query."' failed with this error ".mysqli_error($connection));
+            if($connection)
+            {
+                mysqli_close($connection);
+            }
             return false;
 
         }
@@ -107,7 +119,7 @@ class Database extends Connection
             return mysqli_num_rows($res);
         }
         else{
-            array_push($this->log,"query '".$query."' does not return a result set");
+            $this->writeLog("query '".$query."' does not return a result set");
             return 0;
         }
 
@@ -136,13 +148,13 @@ class Database extends Connection
                 }
             }
             else{
-                array_push($this->log,"result set is empty for query '".$query."'");
+                $this->writeLog("result set is empty for query '".$query."'");
                 return 0;
             }
             
         }
         else{
-            array_push($this->log,"query '".$query."' does not return a result set");
+            $this->writeLog("query '".$query."' does not return a result set");
             return 0;
         }
 
@@ -184,7 +196,7 @@ class Database extends Connection
             }
             else{
 
-                array_push($this->log,"query='".$query."' returns no rows");
+                $this->writeLog("query='".$query."' returns no rows");
                 $failedloop($this->log,true);
 
             }
