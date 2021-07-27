@@ -11,3 +11,5 @@ Step 3: create a php folder to place your php file that will capture data and re
 > php/delete deletes data from the database or rather moves data to another database or table simply your preference
 
 Step 4: for data retrieval on website ui pages include("database/Database.php");
+> use WebMain https://github.com/raynjack/WebMain to generate js code to retrieve js vars for database prodcedures
+> user WebMain https://github.com/raynjack/WebMain to generate php code to check for required POST vars and to create their references  
