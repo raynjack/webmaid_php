@@ -88,7 +88,7 @@ if(class_exists("ConnectionSetting")==false)
                     $this->server = $setting->server;
                     $this->username = $setting->username;
                     $this->password = $setting->password;
-                    
+
                     $connection =mysqli_connect($this->server,$this->username,$this->password,$this->database);
                     $h=mysqli_error($connection);
          
@@ -99,8 +99,8 @@ if(class_exists("ConnectionSetting")==false)
                     }
                     else{
          
-                     $this->writeLog($h);
-                        return false;
+                       $this->writeLog($h);
+                        
          
                     }
                 }
@@ -109,6 +109,7 @@ if(class_exists("ConnectionSetting")==false)
 
            $this->writeLog("did not find a setting that matches any host in the list of connection settings");
            $this->writeLog("".count($this->consetting_array)." settings please check Connection.php and check the connection settings");
+           return false;
 
        }
 
