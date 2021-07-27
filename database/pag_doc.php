@@ -27,7 +27,7 @@ pre code {
 
 <h4>Running pagination</h4>
 <br>
-<a href="index.php">Prev Database.php</a>
+<a href="index.php">Prev Database.php</a>  <a href="table_doc.php">Next Table.php</a>
 
 <pre>
 
@@ -81,5 +81,5 @@ pre code {
 
 </pre>
 
-<a href="index.php">Prev Database.php</a>
+<a href="index.php">Prev Database.php</a>  <a href="table_doc.php">Next Table.php</a>
 

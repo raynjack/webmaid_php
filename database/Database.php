@@ -1,4 +1,8 @@
 <?php
+$scriptname=$_SERVER['SCRIPT_NAME'];
+
+$tr=explode("/",$scriptname);
+$ls=count($tr)-1;
 
 if(class_exists("Connection")==false)
 {
@@ -6,21 +10,21 @@ if(class_exists("Connection")==false)
     {
         include("database/Connection.php");
     }
-    if(file_exists("../Connection/Connection.php")&class_exists("Connection")==false)
+    if(file_exists("../database/Connection.php")&class_exists("Connection")==false)
     {
-        include("../Connection/Connection.php");
+        include("../database/Connection.php");
     }
-    if(file_exists("../../Connection/Connection.php")&class_exists("Connection")==false)
+    if(file_exists("../../database/Connection.php")&class_exists("Connection")==false)
     {
-        include("../../Connection/Connection.php");
+        include("../../database/Connection.php");
     }
-    if(file_exists("../../../Connection/Connection.php")&class_exists("Connection")==false)
+    if(file_exists("../../../database/Connection.php")&class_exists("Connection")==false)
     {
-        include("../../../Connection/Connection.php");
+        include("../../../database/Connection.php");
     }
-    if(file_exists("../../../../Connection/Connection.php")&class_exists("Connection")==false)
+    if(file_exists("../../../../database/Connection.php")&class_exists("Connection")==false)
     {
-        include("../../../../Connection/Connection.php");
+        include("../../../../database/Connection.php");
     }
 
     if(file_exists("Connection.php")&class_exists("Connection")==false)
@@ -70,7 +74,11 @@ class Database extends Connection
     {
 
         $connection =$this->connect($database);
-        $res=mysqli_query($connection,$query);
+        $res=false;
+        if($connection)
+        {
+            $res=mysqli_query($connection,$query);
+        }
 
         if($res instanceof mysqli_result)
         {
@@ -92,7 +100,10 @@ class Database extends Connection
         }
         else{
 
-            $this->writeLog("query '".$query."' failed with this error ".mysqli_error($connection));
+            if($connection instanceof mysqli)
+            {
+                $this->writeLog("query '".$query."' failed with this error ".mysqli_error($connection));
+            }
             if($connection)
             {
                 mysqli_close($connection);
@@ -216,59 +227,313 @@ class Database extends Connection
 
     }
 
+    function getTableFromQuery($query)
+    {
 
+        //get the table
+        $table="";
+        $r=stripos($query," from ");
+        $r1=stripos($query," where ");
+
+        if($r>-1)
+        {
+
+            
+            $e=$r+strlen(" from ");
+            $p=stripos($this->query," limit ");
+
+            if($r1>-1)
+            {
+
+                $table=substr($this->query,$e,($r1-$e));
+
+            }
+            else if($p>-1)
+            {
+
+                $table=substr($this->query,$e,($p-$e));
+
+            }
+            else
+            {
+
+                $table=substr($this->query,$e);               
+
+            }
+
+        }
+        else
+        {
+            $this->writeLog("query is malformed missiong a 'from' ".$query);
+        }
+
+        return $table;
+
+    }
+
+    function getTableFromQueryi()
+    {
+        return $this->getTableFromQuery($this->query);
+    }
+
+    function getConditionFromQuery($query)
+    {
+
+        $r1=stripos($this->query," where ");
+        $c="";
+        if($r1>-1)
+        {
+
+            $c=substr($this->query,$r1);
+
+            //check for 'limit'
+            $y=stripos($c," limit ");
+
+            if($y>-1)
+            {
+
+                $c=substr($c,0,$y);
+
+            }
+
+        }
+        else
+        {
+
+            //check for 'limit'
+            $y=stripos($this->query," limit ");
+
+            if($y>-1)
+            {
+
+                $c=substr($this->query,0,$y);
+
+            }
+
+        }
+
+        return $c;
+
+    }
+
+    function getConditionFromQueryi()
+    {
+        return $this->getConditionFromQuery($this->query);
+    }
     
 
 
 }
 
-if(class_exists("Paginate")==false)
+if($ls>-1)
 {
-    if(file_exists("database/Paginate.php")&class_exists("Paginate")==false)
-    {
-        include("database/Paginate.php");
-    }
-    if(file_exists("../database/Paginate.php")&class_exists("Paginate")==false)
-    {
-        include("../database/Paginate.php");
-    }
-    if(file_exists("../../database/Paginate.php")&class_exists("Paginate")==false)
-    {
-        include("../../database/Paginate.php");
-    }
-    if(file_exists("../../../database/Paginate.php")&class_exists("Paginate")==false)
-    {
-        include("../../../database/Paginate.php");
-    }
-    if(file_exists("../../../../database/Paginate.php")&class_exists("Paginate")==false)
-    {
-        include("../../../../database/Paginate.php");
-    }
 
-    if(file_exists("Paginate.php")&class_exists("Paginate")==false)
-    {
-        include("Paginate.php");
-    }
-    if(file_exists("../Paginate.php")&class_exists("Paginate")==false)
-    {
-        include("../Paginate.php");
-    }
-    if(file_exists("../../Paginate.php")&class_exists("Paginate")==false)
-    {
-        include("../../Paginate.php");
-    }
-    if(file_exists("../../../Paginate.php")&class_exists("Paginate")==false)
-    {
-        include("../../../Paginate.php");
-    }
-    if(file_exists("../../../../Paginate.php")&class_exists("Paginate")==false)
-    {
-        include("../../../../Paginate.php");
-    }
+    $scriptfile=$tr[$ls];
 
-
+    if(class_exists("Table")==false&$scriptfile!="Table.php")
+    {
+        if(file_exists("database/Table.php")&class_exists("Table")==false)
+        {
+            include("database/Table.php");
+        }
+        if(file_exists("../database/Table.php")&class_exists("Table")==false)
+        {
+            include("../database/Table.php");
+        }
+        if(file_exists("../../database/Table.php")&class_exists("Table")==false)
+        {
+            include("../../database/Table.php");
+        }
+        if(file_exists("../../../database/Table.php")&class_exists("Table")==false)
+        {
+            include("../../../database/Table.php");
+        }
+        if(file_exists("../../../../database/Table.php")&class_exists("Table")==false)
+        {
+            include("../../../../database/Table.php");
+        }
+    
+        if(file_exists("Table.php")&class_exists("Table")==false)
+        {
+            include("Table.php");
+        }
+        if(file_exists("../Table.php")&class_exists("Table")==false)
+        {
+            include("../Table.php");
+        }
+        if(file_exists("../../Table.php")&class_exists("Table")==false)
+        {
+            include("../../Table.php");
+        }
+        if(file_exists("../../../Table.php")&class_exists("Table")==false)
+        {
+            include("../../../Table.php");
+        }
+        if(file_exists("../../../../Table.php")&class_exists("Table")==false)
+        {
+            include("../../../../Table.php");
+        }
+    
+    
+    
+    } 
+    
+    if(class_exists("Paginate")==false&$scriptfile!="Paginate.php")
+    {
+        if(class_exists("Paginate")==false)
+        {
+            if(file_exists("database/Paginate.php")&class_exists("Paginate")==false)
+            {
+                include("database/Paginate.php");
+            }
+            if(file_exists("../database/Paginate.php")&class_exists("Paginate")==false)
+            {
+                include("../database/Paginate.php");
+            }
+            if(file_exists("../../database/Paginate.php")&class_exists("Paginate")==false)
+            {
+                include("../../database/Paginate.php");
+            }
+            if(file_exists("../../../database/Paginate.php")&class_exists("Paginate")==false)
+            {
+                include("../../../database/Paginate.php");
+            }
+            if(file_exists("../../../../database/Paginate.php")&class_exists("Paginate")==false)
+            {
+                include("../../../../database/Paginate.php");
+            }
+        
+            if(file_exists("Paginate.php")&class_exists("Paginate")==false)
+            {
+                include("Paginate.php");
+            }
+            if(file_exists("../Paginate.php")&class_exists("Paginate")==false)
+            {
+                include("../Paginate.php");
+            }
+            if(file_exists("../../Paginate.php")&class_exists("Paginate")==false)
+            {
+                include("../../Paginate.php");
+            }
+            if(file_exists("../../../Paginate.php")&class_exists("Paginate")==false)
+            {
+                include("../../../Paginate.php");
+            }
+            if(file_exists("../../../../Paginate.php")&class_exists("Paginate")==false)
+            {
+                include("../../../../Paginate.php");
+            }
+        
+        
+        
+        }
+    }
 
 }
+else{
+
+    if(class_exists("Table")==false)
+    {
+        if(file_exists("database/Table.php")&class_exists("Table")==false)
+        {
+            include("database/Table.php");
+        }
+        if(file_exists("../database/Table.php")&class_exists("Table")==false)
+        {
+            include("../database/Table.php");
+        }
+        if(file_exists("../../database/Table.php")&class_exists("Table")==false)
+        {
+            include("../../database/Table.php");
+        }
+        if(file_exists("../../../database/Table.php")&class_exists("Table")==false)
+        {
+            include("../../../database/Table.php");
+        }
+        if(file_exists("../../../../database/Table.php")&class_exists("Table")==false)
+        {
+            include("../../../../database/Table.php");
+        }
+    
+        if(file_exists("Table.php")&class_exists("Table")==false)
+        {
+            include("Table.php");
+        }
+        if(file_exists("../Table.php")&class_exists("Table")==false)
+        {
+            include("../Table.php");
+        }
+        if(file_exists("../../Table.php")&class_exists("Table")==false)
+        {
+            include("../../Table.php");
+        }
+        if(file_exists("../../../Table.php")&class_exists("Table")==false)
+        {
+            include("../../../Table.php");
+        }
+        if(file_exists("../../../../Table.php")&class_exists("Table")==false)
+        {
+            include("../../../../Table.php");
+        }
+    
+    
+    
+    }
+
+    if(class_exists("Paginate")==false)
+    {
+        if(file_exists("database/Paginate.php")&class_exists("Paginate")==false)
+        {
+            include("database/Paginate.php");
+        }
+        if(file_exists("../database/Paginate.php")&class_exists("Paginate")==false)
+        {
+            include("../database/Paginate.php");
+        }
+        if(file_exists("../../database/Paginate.php")&class_exists("Paginate")==false)
+        {
+            include("../../database/Paginate.php");
+        }
+        if(file_exists("../../../database/Paginate.php")&class_exists("Paginate")==false)
+        {
+            include("../../../database/Paginate.php");
+        }
+        if(file_exists("../../../../database/Paginate.php")&class_exists("Paginate")==false)
+        {
+            include("../../../../database/Paginate.php");
+        }
+    
+        if(file_exists("Paginate.php")&class_exists("Paginate")==false)
+        {
+            include("Paginate.php");
+        }
+        if(file_exists("../Paginate.php")&class_exists("Paginate")==false)
+        {
+            include("../Paginate.php");
+        }
+        if(file_exists("../../Paginate.php")&class_exists("Paginate")==false)
+        {
+            include("../../Paginate.php");
+        }
+        if(file_exists("../../../Paginate.php")&class_exists("Paginate")==false)
+        {
+            include("../../../Paginate.php");
+        }
+        if(file_exists("../../../../Paginate.php")&class_exists("Paginate")==false)
+        {
+            include("../../../../Paginate.php");
+        }
+    
+    
+    
+    }   
+
+}
+
+
+
+
+
 
 
 ?>

@@ -6,21 +6,21 @@ if(class_exists("Database")==false)
     {
         include("database/Database.php");
     }
-    if(file_exists("../Connection/Database.php")&class_exists("Database")==false)
+    if(file_exists("../database/Database.php")&class_exists("Database")==false)
     {
-        include("../Connection/Database.php");
+        include("../database/Database.php");
     }
-    if(file_exists("../../Connection/Database.php")&class_exists("Database")==false)
+    if(file_exists("../../database/Database.php")&class_exists("Database")==false)
     {
-        include("../../Connection/Database.php");
+        include("../../database/Database.php");
     }
-    if(file_exists("../../../Connection/Database.php")&class_exists("Database")==false)
+    if(file_exists("../../../database/Database.php")&class_exists("Database")==false)
     {
-        include("../../../Connection/Database.php");
+        include("../../../database/Database.php");
     }
-    if(file_exists("../../../../Connection/Database.php")&class_exists("Database")==false)
+    if(file_exists("../../../../database/Database.php")&class_exists("Database")==false)
     {
-        include("../../../../Connection/Database.php");
+        include("../../../../database/Database.php");
     }
 
     if(file_exists("Database.php")&class_exists("Database")==false)
@@ -64,6 +64,7 @@ class Paginate extends Database
 
     function __construct($query)
     {
+        parent::__construct();
         $this->query = $query;
     }
 
@@ -81,74 +82,9 @@ class Paginate extends Database
         
         //get the conditions
         //where
-        $r1=stripos($this->query," where ");
-        $c="";
-        if($r1>-1)
-        {
-
-            $c=substr($this->query,$r1);
-
-            //check for 'limit'
-            $y=stripos($c," limit ");
-
-            if($y>-1)
-            {
-
-                $c=substr($c,0,$y);
-
-            }
-
-        }
-        else
-        {
-
-            //check for 'limit'
-            $y=stripos($this->query," limit ");
-
-            if($y>-1)
-            {
-
-                $c=substr($this->query,0,$y);
-
-            }
-
-        }
-
+        $c=$this->getConditionFromQuery($this->query);
         //get the table
-        $table="";
-        $r=stripos($this->query," from ");
-
-        if($r>-1)
-        {
-
-            if($this->write_logs)
-            {
-                
-            }
-            $e=$r+strlen(" from ");
-            $p=stripos($this->query," limit ");
-
-            if($r1>-1)
-            {
-
-                $table=substr($this->query,$e,($r1-$e));
-
-            }
-            else if($p>-1)
-            {
-
-                $table=substr($this->query,$e,($p-$e));
-
-            }
-            else
-            {
-
-                $table=substr($this->query,$e);               
-
-            }
-
-        }
-
+        $table=$this->getTableFromQuery($this->query);
         if(strlen($c)>0)
         {
             return "select count(*) as num_rows from ".$table." ".$c;
