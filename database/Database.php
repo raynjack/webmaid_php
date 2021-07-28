@@ -321,6 +321,10 @@ class Database extends Connection
         return $this->getConditionFromQuery($this->query);
     }
     
+    function generateUniqueID()
+    {
+        return (int)explode(" ",microtime() )[1];
+    }
 
 
 }
