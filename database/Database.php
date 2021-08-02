@@ -326,6 +326,32 @@ class Database extends Connection
         return (int)explode(" ",microtime() )[1];
     }
 
+    function getField($query,$field)
+    {
+
+        $res=$this->runQueryi($query);
+
+        if($res instanceof mysqli_result)
+        {
+
+            if(mysqli_num_rows($res)>0)
+            {
+                while($row=mysqli_fetch_assoc($res))
+                {
+                    return $row[$field];
+                }
+            }
+            else{
+                $this->writeLog("The query '".$query."' has no rows so cannot get field ".$field);
+            }
+        }
+        else
+        {
+            $this->writeLog("The query '".$query."' does not return a result set please check your query and database tables and fields and so forth");
+        }
+
+    }
+
 
 }
 
